@@ -1,7 +1,8 @@
 import { Router } from 'express';
-import { startOfHour, parseISO } from 'date-fns';
+import { parseISO } from 'date-fns';
 
 import AgendamentosRepo from '../repositories/AgendamentosRepo';
+import CriarAgendamentoServico from '../services/CriarAgendamentoServico';
 
 const agendamentosRouter = Router();
 const agendamentosRepo = new AgendamentosRepo();
@@ -13,18 +14,19 @@ agendamentosRouter.get('/', (req, res) => {
 });
 
 agendamentosRouter.post('/', (req, res) => {
-  const { provedor, data } = req.body;
+  try {
+    const { provedor, data } = req.body;
 
-  const dataArrumada = startOfHour(parseISO(data));
+    const dataArrumada = parseISO(data);
 
-  const dataEmUso = agendamentosRepo.encontrarPorData(dataArrumada);
+    const CriarAgendamento = new CriarAgendamentoServico(agendamentosRepo);
 
-  if (dataEmUso) {
-    return res.status(400).json({ message: 'Este horário ja está agendado' });
+    const agendamento = CriarAgendamento.execute({ data: dataArrumada, provedor });
+
+    return res.json(agendamento);
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
   }
-
-  const agendamento = agendamentosRepo.create({ provedor, data: dataArrumada });
-  return res.json(agendamento);
 });
 
 export default agendamentosRouter;
