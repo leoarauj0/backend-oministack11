@@ -1,12 +1,10 @@
-// import { id } from 'date-fns/locale';
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export default class CriarAgendamentos1603718833710
-  implements MigrationInterface {
+export default class CriarUsuarios1603856047496 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'agendamentos',
+        name: 'usuarios',
         columns: [
           {
             name: 'id',
@@ -16,14 +14,17 @@ export default class CriarAgendamentos1603718833710
             default: 'uuid_generate_v4()',
           },
           {
-            name: 'provedor',
+            name: 'nome',
             type: 'varchar',
-            isNullable: false,
           },
           {
-            name: 'data',
-            type: 'timestamp with time zone',
-            isNullable: false,
+            name: 'email',
+            type: 'varchar',
+            isUnique: true,
+          },
+          {
+            name: 'senha',
+            type: 'varchar',
           },
           {
             name: 'criado_em',

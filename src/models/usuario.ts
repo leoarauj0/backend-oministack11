@@ -7,16 +7,19 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity('agendamentos')
-class Agendamento {
+@Entity('usuarios')
+class Usuario {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
-  provedor: string;
+  nome: string;
 
-  @Column('timestamp with time zone')
-  data: Date;
+  @Column()
+  email: string;
+
+  @Column()
+  senha: string;
 
   @CreateDateColumn()
   criado_em: Date;
@@ -25,4 +28,4 @@ class Agendamento {
   atualizado_em: Date;
 }
 
-export default Agendamento;
+export default Usuario;
