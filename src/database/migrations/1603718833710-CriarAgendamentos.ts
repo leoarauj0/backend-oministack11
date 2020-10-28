@@ -13,6 +13,7 @@ export default class CriarAgendamentos1603718833710
             type: 'varchar',
             isPrimary: true,
             generationStrategy: 'uuid',
+            default: 'uuid_generate_v4()',
           },
           {
             name: 'provedor',
@@ -20,7 +21,7 @@ export default class CriarAgendamentos1603718833710
             isNullable: false,
           },
           {
-            name: 'date',
+            name: 'data',
             type: 'timestamp with time zone',
             isNullable: false,
           },
