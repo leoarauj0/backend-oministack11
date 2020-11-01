@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { Router } from 'express';
 import { parseISO } from 'date-fns';
 import { getCustomRepository } from 'typeorm';
@@ -16,7 +17,7 @@ agendamentosRouter.get('/', async (req, res) => {
 
 agendamentosRouter.post('/', async (req, res) => {
   try {
-    const { provedor, data } = req.body;
+    const { provedor_id, data } = req.body;
 
     const dataArrumada = parseISO(data);
 
@@ -24,7 +25,7 @@ agendamentosRouter.post('/', async (req, res) => {
 
     const agendamento = await criarAgendamento.execute({
       data: dataArrumada,
-      provedor,
+      provedor_id,
     });
 
     return res.json(agendamento);

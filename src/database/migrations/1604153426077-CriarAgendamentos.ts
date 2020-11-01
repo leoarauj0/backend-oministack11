@@ -10,15 +10,17 @@ export default class CriarAgendamentos1603718833710
         columns: [
           {
             name: 'id',
-            type: 'varchar',
+            type: 'uuid',
             isPrimary: true,
             generationStrategy: 'uuid',
             default: 'uuid_generate_v4()',
           },
           {
-            name: 'provedor',
-            type: 'varchar',
-            isNullable: false,
+            name: 'provedor_id',
+            type: 'uuid',
+            isNullable: true,
+            generationStrategy: 'uuid',
+            default: 'uuid_generate_v4()',
           },
           {
             name: 'data',
