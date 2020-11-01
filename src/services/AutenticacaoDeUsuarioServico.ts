@@ -1,6 +1,8 @@
 import { compare } from 'bcryptjs';
 import { getRepository } from 'typeorm';
 
+import { sign } from 'jsonwebtoken';
+
 import Usuario from '../models/usuario';
 
 interface RequestDTO {
@@ -10,6 +12,7 @@ interface RequestDTO {
 
 interface ResponseDTO {
   usuario: Usuario;
+  token: string;
 }
 
 class AutenticacaoDeUsuarioServico {
@@ -28,8 +31,16 @@ class AutenticacaoDeUsuarioServico {
       throw new Error('Senha incorreta.');
     }
 
+    // 1° parametro vai informações que podem ser desincriptadas
+    // 3° parametro configurações do token
+    const token = sign({}, '110d46fcd978c24f306cd7fa23464d73', {
+      subject: usuario.id,
+      expiresIn: '1d',
+    });
+
     return {
       usuario,
+      token,
     };
   }
 }

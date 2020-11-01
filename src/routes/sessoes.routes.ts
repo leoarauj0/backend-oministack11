@@ -11,17 +11,15 @@ sessoesRouter.post('/', async (req, res) => {
 
     const autenticacaoDeUsuario = new AutenticacaoDeUsuarioServico();
 
-    const { usuario } = await autenticacaoDeUsuario.execute({
+    const { usuario, token } = await autenticacaoDeUsuario.execute({
       email,
       senha,
     });
 
-    // @Starlord
-    // a porra do delete nao queria funcionar entao eis a pegadinha
     // delete usuario.senha;
     usuario.senha = 'bleee!';
 
-    return res.json({ usuario });
+    return res.json({ usuario, token });
   } catch (err) {
     return res.status(400).json({ error: err.message });
   }
