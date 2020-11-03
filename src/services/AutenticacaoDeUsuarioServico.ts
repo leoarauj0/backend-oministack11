@@ -1,7 +1,7 @@
 import { compare } from 'bcryptjs';
 import { getRepository } from 'typeorm';
-
 import { sign } from 'jsonwebtoken';
+import autenticacaoConfig from '../config/autenticacao';
 
 import Usuario from '../models/usuario';
 
@@ -31,11 +31,12 @@ class AutenticacaoDeUsuarioServico {
       throw new Error('Senha incorreta.');
     }
 
+    const { secret, expiresIn } = autenticacaoConfig.jwt;
     // 1° parametro vai informações que podem ser desincriptadas
     // 3° parametro configurações do token
-    const token = sign({}, '110d46fcd978c24f306cd7fa23464d73', {
+    const token = sign({}, secret, {
       subject: usuario.id,
-      expiresIn: '1d',
+      expiresIn,
     });
 
     return {

@@ -6,7 +6,13 @@ import { getCustomRepository } from 'typeorm';
 import AgendamentosRepo from '../repositories/AgendamentosRepo';
 import CriarAgendamentoServico from '../services/CriarAgendamentoServico';
 
+import garantirAutenticacao from '../middlewares/garantirAutenticacao';
+
 const agendamentosRouter = Router();
+
+agendamentosRouter.use(garantirAutenticacao);
+// garate que todas as rotas seguintes usam esse autenticação
+// se quisesse usar em uma rota expecifica era só passar a autenticacao como paramento: ('/', garantirAutenticacao, async (req, res.....
 
 agendamentosRouter.get('/', async (req, res) => {
   const agendamentosRepo = getCustomRepository(AgendamentosRepo);
