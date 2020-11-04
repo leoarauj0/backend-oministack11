@@ -18,23 +18,19 @@ interface Usuario {
 }
 
 usuariosRouter.post('/', async (req, res) => {
-  try {
-    const { nome, email, senha } = req.body;
+  const { nome, email, senha } = req.body;
 
-    const CriarUsuario = new CriarUsuarioServico();
+  const CriarUsuario = new CriarUsuarioServico();
 
-    const usuario: Usuario = await CriarUsuario.execute({
-      nome,
-      email,
-      senha,
-    });
+  const usuario: Usuario = await CriarUsuario.execute({
+    nome,
+    email,
+    senha,
+  });
 
-    delete usuario.senha;
+  delete usuario.senha;
 
-    return res.json(usuario);
-  } catch (err) {
-    return res.status(400).json({ error: err.message });
-  }
+  return res.json(usuario);
 });
 
 // patch atualiza somente uma informação do usuario como no caso avatar
@@ -43,20 +39,16 @@ usuariosRouter.patch(
   garatirAutenticacao,
   upload.single('avatar'),
   async (req, res) => {
-    try {
-      const addAvatarAoUsuario = new AddAvatarAoUsuarioServico();
+    const addAvatarAoUsuario = new AddAvatarAoUsuarioServico();
 
-      const usuario = await addAvatarAoUsuario.execute({
-        usuario_id: req.user.id,
-        nomeDoAvatar: req.file.filename,
-      });
+    const usuario = await addAvatarAoUsuario.execute({
+      usuario_id: req.user.id,
+      nomeDoAvatar: req.file.filename,
+    });
 
-      usuario.senha = 'bleee!';
+    usuario.senha = 'bleee!';
 
-      return res.json(usuario);
-    } catch (error) {
-      return res.status(400).json({ error: error.message });
-    }
+    return res.json(usuario);
   },
 );
 export default usuariosRouter;

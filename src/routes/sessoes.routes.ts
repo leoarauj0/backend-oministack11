@@ -6,23 +6,19 @@ import AutenticacaoDeUsuarioServico from '../services/AutenticacaoDeUsuarioServi
 const sessoesRouter = Router();
 
 sessoesRouter.post('/', async (req, res) => {
-  try {
-    const { email, senha } = req.body;
+  const { email, senha } = req.body;
 
-    const autenticacaoDeUsuario = new AutenticacaoDeUsuarioServico();
+  const autenticacaoDeUsuario = new AutenticacaoDeUsuarioServico();
 
-    const { usuario, token } = await autenticacaoDeUsuario.execute({
-      email,
-      senha,
-    });
+  const { usuario, token } = await autenticacaoDeUsuario.execute({
+    email,
+    senha,
+  });
 
-    // delete usuario.senha;
-    usuario.senha = 'bleee!';
+  // delete usuario.senha;
+  usuario.senha = 'bleee!';
 
-    return res.json({ usuario, token });
-  } catch (err) {
-    return res.status(400).json({ error: err.message });
-  }
+  return res.json({ usuario, token });
 });
 
 export default sessoesRouter;

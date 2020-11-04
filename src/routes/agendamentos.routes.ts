@@ -22,22 +22,18 @@ agendamentosRouter.get('/', async (req, res) => {
 });
 
 agendamentosRouter.post('/', async (req, res) => {
-  try {
-    const { provedor_id, data } = req.body;
+  const { provedor_id, data } = req.body;
 
-    const dataArrumada = parseISO(data);
+  const dataArrumada = parseISO(data);
 
-    const criarAgendamento = new CriarAgendamentoServico();
+  const criarAgendamento = new CriarAgendamentoServico();
 
-    const agendamento = await criarAgendamento.execute({
-      data: dataArrumada,
-      provedor_id,
-    });
+  const agendamento = await criarAgendamento.execute({
+    data: dataArrumada,
+    provedor_id,
+  });
 
-    return res.json(agendamento);
-  } catch (err) {
-    return res.status(400).json({ error: err.message });
-  }
+  return res.json(agendamento);
 });
 
 export default agendamentosRouter;
