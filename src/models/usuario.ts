@@ -21,6 +21,9 @@ class Usuario {
   @Column()
   senha: string;
 
+  @Column()
+  avatar: string;
+
   @CreateDateColumn()
   criado_em: Date;
 

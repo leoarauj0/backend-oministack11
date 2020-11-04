@@ -5,6 +5,8 @@ import uploadConfig from '../config/upload';
 import garatirAutenticacao from '../middlewares/garantirAutenticacao';
 import CriarUsuarioServico from '../services/CriarUsuarioServico';
 
+import AddAvatarAoUsuarioServico from '../services/AddAvatarAoUsuarioServico';
+
 const usuariosRouter = Router();
 
 const upload = multer(uploadConfig);
@@ -13,7 +15,6 @@ interface Usuario {
   nome: string;
   email: string;
   senha?: string;
-  user?: any;
 }
 
 usuariosRouter.post('/', async (req, res) => {
@@ -42,7 +43,20 @@ usuariosRouter.patch(
   garatirAutenticacao,
   upload.single('avatar'),
   async (req, res) => {
-    return res.json({ ok: true });
+    try {
+      const addAvatarAoUsuario = new AddAvatarAoUsuarioServico();
+
+      const usuario = await addAvatarAoUsuario.execute({
+        usuario_id: req.user.id,
+        nomeDoAvatar: req.file.filename,
+      });
+
+      usuario.senha = 'bleee!';
+
+      return res.json(usuario);
+    } catch (error) {
+      return res.status(400).json({ error: error.message });
+    }
   },
 );
 export default usuariosRouter;
