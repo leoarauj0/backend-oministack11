@@ -3,6 +3,8 @@ import path from 'path';
 import fs from 'fs';
 import Usuario from '../models/usuario';
 
+import AppError from '../errors/AppError';
+
 import uploadConfig from '../config/upload';
 
 interface Request {
@@ -20,7 +22,10 @@ class AddAvatarAoUsuario {
     const usuario = await usuariosRepo.findOne(usuario_id);
 
     if (!usuario) {
-      throw new Error('Somente usuários autenticados podem mudar o avatar.');
+      throw new AppError(
+        'Somente usuários autenticados podem mudar o avatar.',
+        401,
+      );
     }
 
     if (usuario.avatar) {

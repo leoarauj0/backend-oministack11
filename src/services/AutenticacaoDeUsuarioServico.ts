@@ -3,6 +3,8 @@ import { getRepository } from 'typeorm';
 import { sign } from 'jsonwebtoken';
 import autenticacaoConfig from '../config/autenticacao';
 
+import AppError from '../errors/AppError';
+
 import Usuario from '../models/usuario';
 
 interface RequestDTO {
@@ -22,13 +24,13 @@ class AutenticacaoDeUsuarioServico {
     const usuario = await usuariosRepo.findOne({ where: { email } });
 
     if (!usuario) {
-      throw new Error('Login incorreto.');
+      throw new AppError('Login incorreto.', 401);
     }
 
     const senhaCoincide = await compare(senha, usuario.senha);
 
     if (!senhaCoincide) {
-      throw new Error('Senha incorreta.');
+      throw new AppError('Senha incorreta.', 401);
     }
 
     const { secret, expiresIn } = autenticacaoConfig.jwt;

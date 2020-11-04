@@ -1,6 +1,8 @@
 import { startOfHour } from 'date-fns';
 import { getCustomRepository } from 'typeorm';
 
+import AppError from '../errors/AppError';
+
 import Agendamento from '../models/agendamentos';
 import AgendamentosRepo from '../repositories/AgendamentosRepo';
 
@@ -20,7 +22,7 @@ class CriarAgendamentoServico {
     const dataEmUso = await agendamentosRepo.encontrarPorData(dataAgendamento);
 
     if (dataEmUso) {
-      throw Error('Este horário já está agendado');
+      throw new AppError('Este horário já está agendado');
     }
 
     const agendamento = agendamentosRepo.create({

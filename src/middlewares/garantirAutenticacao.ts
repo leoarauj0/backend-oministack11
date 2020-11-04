@@ -2,6 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 import { verify } from 'jsonwebtoken';
 import autenticacaoConfig from '../config/autenticacao';
 
+import AppError from '../errors/AppError';
+
 interface TokenInfo {
   iat: number;
   exp: number;
@@ -16,7 +18,7 @@ export default function garatirAutenticacao(
   const autenticacaoCabecalho = req.headers.authorization;
 
   if (!autenticacaoCabecalho) {
-    throw new Error('Token não informado.');
+    throw new AppError('Token não informado.', 401);
   }
 
   // o token  é dividido em duas partes:
