@@ -1,0 +1,4 @@
+  Quando utilizamos injeção de dependencia,
+devemos usar algo para controlar as dependencias da nossa aplicação.
+  O container que vai dizer pro nosso service qual o
+repositório que vai ser ijentado nos nossas variaveis.

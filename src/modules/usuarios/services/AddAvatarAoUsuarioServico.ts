@@ -1,25 +1,26 @@
-import { getRepository } from 'typeorm';
 import path from 'path';
 import fs from 'fs';
-import Usuario from '../models/usuario';
+import uploadConfig from '@config/upload';
+import AppError from '@compartilhado/errors/AppError';
+import { injectable, inject } from 'tsyringe';
+import Usuario from '../infra/typeorm/entities/usuario';
 
-import AppError from '../errors/AppError';
+import IUsuariosRepo from '../repositories/IUsuariosRepo';
 
-import uploadConfig from '../config/upload';
-
-interface Request {
+interface IRequest {
   usuario_id: string;
   nomeDoAvatar: string;
 }
 
+@injectable()
 class AddAvatarAoUsuario {
+  constructor(@inject('UsuariosRepo') private usuariosRepo: IUsuariosRepo) {}
+
   public async execute({
     usuario_id,
     nomeDoAvatar,
-  }: Request): Promise<Usuario> {
-    const usuariosRepo = getRepository(Usuario);
-
-    const usuario = await usuariosRepo.findOne(usuario_id);
+  }: IRequest): Promise<Usuario> {
+    const usuario = await this.usuariosRepo.encontrarPorId(usuario_id);
 
     if (!usuario) {
       throw new AppError(
@@ -45,7 +46,7 @@ class AddAvatarAoUsuario {
     // pegando a informação que ja temos em usuario para salvar o avatar
     usuario.avatar = nomeDoAvatar;
 
-    await usuariosRepo.save(usuario);
+    await this.usuariosRepo.save(usuario);
 
     return usuario;
   }

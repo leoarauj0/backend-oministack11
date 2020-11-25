@@ -1,27 +1,33 @@
 import { compare } from 'bcryptjs';
-import { getRepository } from 'typeorm';
 import { sign } from 'jsonwebtoken';
-import autenticacaoConfig from '../config/autenticacao';
+import autenticacaoConfig from '@config/autenticacao';
 
-import AppError from '../errors/AppError';
+import AppError from '@compartilhado/errors/AppError';
 
-import Usuario from '../models/usuario';
+import { injectable, inject } from 'tsyringe';
+import Usuario from '../infra/typeorm/entities/usuario';
 
-interface RequestDTO {
+import IUsuariosRepo from '../repositories/IUsuariosRepo';
+
+interface IRequestDTO {
   email: string;
   senha: string;
 }
 
-interface ResponseDTO {
+interface IResponseDTO {
   usuario: Usuario;
   token: string;
 }
 
+@injectable()
 class AutenticacaoDeUsuarioServico {
-  public async execute({ email, senha }: RequestDTO): Promise<ResponseDTO> {
-    const usuariosRepo = getRepository(Usuario);
+  constructor(
+    @inject('UsuariosRepo')
+    private usuariosRepo: IUsuariosRepo,
+  ) {}
 
-    const usuario = await usuariosRepo.findOne({ where: { email } });
+  public async execute({ email, senha }: IRequestDTO): Promise<IResponseDTO> {
+    const usuario = await this.usuariosRepo.encontrarPorEmail(email);
 
     if (!usuario) {
       throw new AppError('Login incorreto.', 401);

@@ -9,7 +9,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-import Usuario from './usuario';
+import Usuario from '@modules/usuarios/infra/typeorm/entities/usuario';
 
 @Entity('agendamentos')
 class Agendamento {
